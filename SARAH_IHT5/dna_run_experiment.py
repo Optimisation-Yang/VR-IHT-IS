@@ -54,15 +54,14 @@ d = X_train.shape[1]
 
 c_mat = 0.5 * (np.eye(n_classes) - 1 / n_classes * np.ones((n_classes, n_classes)))
 
-LAM = 1e-3
-MAX_ITER = 3000
+LAM = 1e-2
+MAX_ITER = 3500
 
 
 def get_L(lam):
-    return np.linalg.norm(
-        np.kron(c_mat, X_train.T @ X_train) / n_train + 2 * lam * np.eye(n_classes * d),
-        ord=2
-    )
+    c_norm = np.linalg.norm(c_mat, ord=2)
+    row_norm2 = np.sum(X_train * X_train, axis=1)
+    return float(np.mean(c_norm * row_norm2 + 2.0 * lam))
 
 
 def to_serializable(obj):
