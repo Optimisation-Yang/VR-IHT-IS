@@ -88,7 +88,7 @@ print("X shape:", X.shape)
 
 lam = 1
 
-maxIter = 1800
+maxIter = 2500
 tol = 1e-4
 
 n = X.shape[0]
@@ -99,7 +99,7 @@ sparsity = int(0.3 * d)
 batch_size = int(np.sqrt(n))
 m = 2 * batch_size
 
-L_X = (2.0 / n) * (np.linalg.norm(X, ord=2) ** 2)
+L_X = np.mean(2.0 * np.sum(X * X, axis=1) + lam)
 eta = 4.0
 
 n_runs = 20
@@ -126,7 +126,8 @@ for run_id in range(n_runs):
         X_train=X,
         y_train=y,
         batch_size=batch_size,
-        L=L_X + lam,
+        # L=L_X + lam,
+        L=L_X,
         eval=True,
         sparsity=sparsity,
         m=m,
